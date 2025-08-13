@@ -1,0 +1,88 @@
+@model scım.Models.User
+
+@{
+    ViewData["Title"] = "Kullanıcı Sil";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="card-title">
+                        <i class="fas fa-exclamation-triangle"></i> Kullanıcı Silme Onayı
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Dikkat!</h5>
+                        <p>Bu işlem geri alınamaz. Kullanıcı hem yerel sistemden hem de entegre edilmiş bulut servislerinden kalıcı olarak silinecektir.</p>
+                    </div>
+
+                    <h5>Silinecek Kullanıcı Bilgileri:</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td><strong>ID:</strong></td>
+                            <td>@Model.Id</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kullanıcı Adı:</strong></td>
+                            <td>@Model.UserName</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ad Soyad:</strong></td>
+                            <td>@Model.FirstName @Model.LastName</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E-posta:</strong></td>
+                            <td>@Model.Email</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SCIM ID:</strong></td>
+                            <td>@Model.ScimId</td>
+                        </tr>
+                    </table>
+
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-cloud"></i> Etkilenecek Bulut Servisleri:</h6>
+                        <ul class="mb-0">
+                            <li>Microsoft Azure AD</li>
+                            <li>Okta</li>
+                            <li>Google Workspace</li>
+                        </ul>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="confirmDelete" required />
+                                <label class="custom-control-label" for="confirmDelete">
+                                    Bu kullanıcının silinmesini onaylıyorum ve tüm bulut servislerinden de kaldırılacağını anlıyorum.
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                                <i class="fas fa-trash"></i> Kullanıcıyı Sil
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#confirmDelete').change(function () {
+                $('#deleteBtn').prop('disabled', !this.checked);
+            });
+        });
+    </script>
+}

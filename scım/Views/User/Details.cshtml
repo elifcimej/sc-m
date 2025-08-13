@@ -1,0 +1,212 @@
+@model scım.Models.User
+
+@{
+    ViewData["Title"] = "Kullanıcı Detayları";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user"></i> Kullanıcı Detayları: @Model.FirstName @Model.LastName
+                    </h3>
+                    <div class="card-tools">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Düzenle
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Geri Dön
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-info-circle"></i> Temel Bilgiler</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>ID:</strong></td>
+                                    <td>@Model.Id</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kullanıcı Adı:</strong></td>
+                                    <td>@Model.UserName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ad Soyad:</strong></td>
+                                    <td>@Model.FirstName @Model.LastName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>E-posta:</strong></td>
+                                    <td>@Model.Email</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Telefon:</strong></td>
+                                    <td>@(string.IsNullOrEmpty(Model.PhoneNumber) ? "-" : Model.PhoneNumber)</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-briefcase"></i> İş Bilgileri</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Departman:</strong></td>
+                                    <td>@(string.IsNullOrEmpty(Model.Department) ? "-" : Model.Department)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pozisyon:</strong></td>
+                                    <td>@(string.IsNullOrEmpty(Model.JobTitle) ? "-" : Model.JobTitle)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Durum:</strong></td>
+                                    <td>
+                                        @if (Model.IsActive)
+                                        {
+                                            <span class="badge badge-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger">Pasif</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5><i class="fas fa-cloud"></i> SCIM Entegrasyon Bilgileri</h5>
+                            <div class="alert alert-info">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>SCIM ID:</strong> @Model.ScimId<br />
+                                        <strong>External ID:</strong> @(string.IsNullOrEmpty(Model.ExternalId) ? "-" : Model.ExternalId)<br />
+                                        <strong>Resource Type:</strong> @Model.MetaResourceType
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Oluşturulma Tarihi:</strong> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")<br />
+                                        @if (Model.UpdatedAt.HasValue)
+                                        {
+                                            <strong>Güncellenme Tarihi:</strong> @Model.UpdatedAt.Value.ToString("dd.MM.yyyy HH:mm")<br />
+                                        }
+                                        @if (Model.MetaLastModified.HasValue)
+                                        {
+                                            <strong>Son SCIM Güncelleme:</strong> @Model.MetaLastModified.Value.ToString("dd.MM.yyyy HH:mm")
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5><i class="fas fa-sync-alt"></i> Bulut Servis Entegrasyonları</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card bg-primary text-white">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-microsoft fa-2x mb-2"></i>
+                                            <h6>Microsoft Azure AD</h6>
+                                            <small>Entegre</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card bg-success text-white">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                                            <h6>Okta</h6>
+                                            <small>Entegre</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card bg-danger text-white">
+                                        <div class="card-body text-center">
+                                            <i class="fab fa-google fa-2x mb-2"></i>
+                                            <h6>Google Workspace</h6>
+                                            <small>Entegre</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5><i class="fas fa-history"></i> İşlem Geçmişi</h5>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-success"></div>
+                                    <div class="timeline-content">
+                                        <h6>Kullanıcı Oluşturuldu</h6>
+                                        <p class="text-muted">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+                                        <p>Kullanıcı sisteme eklendi ve bulut servislerine senkronize edildi.</p>
+                                    </div>
+                                </div>
+                                @if (Model.UpdatedAt.HasValue)
+                                {
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-info"></div>
+                                        <div class="timeline-content">
+                                            <h6>Kullanıcı Güncellendi</h6>
+                                            <p class="text-muted">@Model.UpdatedAt.Value.ToString("dd.MM.yyyy HH:mm")</p>
+                                            <p>Kullanıcı bilgileri güncellendi ve bulut servislerine senkronize edildi.</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 3px solid #007bff;
+}
+
+.timeline-content h6 {
+    margin: 0 0 5px 0;
+    color: #007bff;
+}
+
+.timeline-content p {
+    margin: 0;
+}
+</style>

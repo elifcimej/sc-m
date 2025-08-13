@@ -1,0 +1,232 @@
+﻿@{
+    ViewData["Title"] = "SCIM Kimlik Yönetimi Sistemi";
+}
+
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="jumbotron bg-primary text-white">
+                <div class="container">
+                    <h1 class="display-4">
+                        <i class="fas fa-cloud"></i> SCIM Kimlik Yönetimi Sistemi
+                    </h1>
+                    <p class="lead">
+                        Bulut tabanlı uygulamalarla kullanıcı senkronizasyonu için SCIM protokolü tabanlı kimlik yönetimi sistemi.
+                    </p>
+                    <hr class="my-4">
+                    <p>
+                        Bu sistem, kullanıcı bilgilerini Microsoft Azure AD, Okta ve Google Workspace gibi popüler bulut servisleriyle otomatik olarak senkronize eder.
+                    </p>
+                    <a class="btn btn-light btn-lg" asp-controller="User" asp-action="Index" role="button">
+                        <i class="fas fa-users"></i> Kullanıcıları Yönet
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-sync-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Otomatik Senkronizasyon</h5>
+                    <p class="card-text">
+                        Kullanıcı oluşturma, güncelleme ve silme işlemleri otomatik olarak entegre edilmiş bulut servislerine yansıtılır.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Güvenli Entegrasyon</h5>
+                    <p class="card-text">
+                        SCIM protokolü ile güvenli ve standart kimlik yönetimi. OAuth 2.0 ve API token tabanlı kimlik doğrulama.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-cloud fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Çoklu Bulut Desteği</h5>
+                    <p class="card-text">
+                        Microsoft Azure AD, Okta, Google Workspace ve diğer SCIM destekli bulut servisleriyle entegrasyon.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bolt"></i> Hızlı İşlemler
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a asp-controller="User" asp-action="Create" class="btn btn-primary btn-block mb-2">
+                                <i class="fas fa-user-plus"></i> Yeni Kullanıcı
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="User" asp-action="Index" class="btn btn-info btn-block mb-2">
+                                <i class="fas fa-users"></i> Kullanıcı Listesi
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="/scim/v2/Users" class="btn btn-success btn-block mb-2">
+                                <i class="fas fa-code"></i> SCIM API
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-warning btn-block mb-2">
+                                <i class="fas fa-cog"></i> Ayarlar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-server"></i> Sistem Durumu
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h4 class="text-success">Aktif</h4>
+                                <small class="text-muted">Sistem Durumu</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h4 class="text-info">SCIM v2.0</h4>
+                                <small class="text-muted">Protokol Versiyonu</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-plug"></i> Entegrasyon Durumu
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="text-center">
+                                <i class="fas fa-microsoft fa-2x text-primary"></i>
+                                <div><small>Azure AD</small></div>
+                                <span class="badge badge-success">Bağlı</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-center">
+                                <i class="fas fa-shield-alt fa-2x text-success"></i>
+                                <div><small>Okta</small></div>
+                                <span class="badge badge-success">Bağlı</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-center">
+                                <i class="fab fa-google fa-2x text-danger"></i>
+                                <div><small>Google</small></div>
+                                <span class="badge badge-success">Bağlı</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCIM Information -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle"></i> SCIM Protokolü Hakkında
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>SCIM Nedir?</h6>
+                            <p>
+                                SCIM (System for Cross-domain Identity Management), farklı sistemler arasında kullanıcı kimlik bilgilerinin 
+                                otomatik olarak senkronize edilmesini sağlayan açık bir standarttır.
+                            </p>
+                            <h6>Avantajları:</h6>
+                            <ul>
+                                <li>Otomatik kullanıcı provisioning</li>
+                                <li>Standart API protokolü</li>
+                                <li>Güvenli kimlik yönetimi</li>
+                                <li>Çoklu sistem entegrasyonu</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Desteklenen İşlemler:</h6>
+                            <ul>
+                                <li><strong>GET /scim/v2/Users</strong> - Kullanıcı listesi</li>
+                                <li><strong>POST /scim/v2/Users</strong> - Kullanıcı oluşturma</li>
+                                <li><strong>PUT /scim/v2/Users/{id}</strong> - Kullanıcı güncelleme</li>
+                                <li><strong>DELETE /scim/v2/Users/{id}</strong> - Kullanıcı silme</li>
+                            </ul>
+                            <h6>Entegre Edilen Servisler:</h6>
+                            <ul>
+                                <li>Microsoft Azure Active Directory</li>
+                                <li>Okta Identity Platform</li>
+                                <li>Google Workspace</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.jumbotron {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border-radius: 0.5rem;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-block {
+    height: 50px;
+    line-height: 35px;
+}
+</style>
