@@ -42,4 +42,4 @@ app.MapControllerRoute(
     name: "scim",
     pattern: "scim/v2/{controller}/{action=Index}/{id?}");
 
-app.Run("http://localhost:5000");
+app.Run();

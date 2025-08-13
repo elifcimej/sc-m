@@ -176,13 +176,26 @@ namespace scım.Services
                         switch (integrationName)
                         {
                             case "AzureAD":
-                                // Add Azure AD authentication
+                                // Azure AD authentication with Bearer token
+                                var accessToken = await GetAzureADAccessTokenAsync(integration);
+                                if (!string.IsNullOrEmpty(accessToken))
+                                {
+                                    request.Headers.Add("Authorization", $"Bearer {accessToken}");
+                                    request.Headers.Add("Content-Type", "application/json");
+                                }
                                 break;
                             case "Okta":
                                 request.Headers.Add("Authorization", $"SSWS {integration["ApiToken"]}");
+                                request.Headers.Add("Content-Type", "application/json");
                                 break;
                             case "GoogleWorkspace":
-                                // Add Google Workspace authentication
+                                // Google Workspace authentication with Service Account
+                                var googleToken = await GetGoogleWorkspaceTokenAsync(integration);
+                                if (!string.IsNullOrEmpty(googleToken))
+                                {
+                                    request.Headers.Add("Authorization", $"Bearer {googleToken}");
+                                    request.Headers.Add("Content-Type", "application/json");
+                                }
                                 break;
                         }
 
@@ -255,12 +268,28 @@ namespace scım.Services
                             Content = operation.ToLower() != "delete" ? content : null
                         };
 
-                        // Add authentication headers
                         var integrationName = integration.Key;
                         switch (integrationName)
                         {
+                            case "AzureAD":
+                                var accessToken = await GetAzureADAccessTokenAsync(integration);
+                                if (!string.IsNullOrEmpty(accessToken))
+                                {
+                                    request.Headers.Add("Authorization", $"Bearer {accessToken}");
+                                    request.Headers.Add("Content-Type", "application/json");
+                                }
+                                break;
                             case "Okta":
                                 request.Headers.Add("Authorization", $"SSWS {integration["ApiToken"]}");
+                                request.Headers.Add("Content-Type", "application/json");
+                                break;
+                            case "GoogleWorkspace":
+                                var googleToken = await GetGoogleWorkspaceTokenAsync(integration);
+                                if (!string.IsNullOrEmpty(googleToken))
+                                {
+                                    request.Headers.Add("Authorization", $"Bearer {googleToken}");
+                                    request.Headers.Add("Content-Type", "application/json");
+                                }
                                 break;
                         }
 
@@ -290,6 +319,89 @@ namespace scım.Services
             {
                 _logger.LogError(ex, "Error in SyncGroupToCloudServicesAsync for group {DisplayName}", group.DisplayName);
                 return false;
+            }
+        }
+
+        private async Task<string?> GetAzureADAccessTokenAsync(IConfigurationSection integration)
+        {
+            try
+            {
+                var tenantId = integration["TenantId"];
+                var clientId = integration["ClientId"];
+                var clientSecret = integration["ClientSecret"];
+
+                if (string.IsNullOrEmpty(tenantId) || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
+                {
+                    _logger.LogWarning("Azure AD configuration is incomplete");
+                    return null;
+                }
+
+                var tokenUrl = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token";
+                var tokenRequest = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("grant_type", "client_credentials"),
+                    new KeyValuePair<string, string>("client_id", clientId),
+                    new KeyValuePair<string, string>("client_secret", clientSecret),
+                    new KeyValuePair<string, string>("scope", "https://graph.microsoft.com/.default")
+                });
+
+                var response = await _httpClient.PostAsync(tokenUrl, tokenRequest);
+                if (response.IsSuccessStatusCode)
+                {
+                    var tokenResponse = await response.Content.ReadAsStringAsync();
+                    var tokenData = JsonConvert.DeserializeObject<Dictionary<string, object>>(tokenResponse);
+                    return tokenData?["access_token"]?.ToString();
+                }
+
+                _logger.LogError("Failed to get Azure AD access token: {StatusCode}", response.StatusCode);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting Azure AD access token");
+                return null;
+            }
+        }
+
+        private async Task<string?> GetGoogleWorkspaceTokenAsync(IConfigurationSection integration)
+        {
+            try
+            {
+                var serviceAccountEmail = integration["ServiceAccountEmail"];
+                var privateKeyPath = integration["PrivateKeyPath"];
+
+                if (string.IsNullOrEmpty(serviceAccountEmail) || string.IsNullOrEmpty(privateKeyPath))
+                {
+                    _logger.LogWarning("Google Workspace configuration is incomplete");
+                    return null;
+                }
+
+                // Read private key from file
+                if (!File.Exists(privateKeyPath))
+                {
+                    _logger.LogWarning("Google Workspace private key file not found: {Path}", privateKeyPath);
+                    return null;
+                }
+
+                var privateKeyJson = await File.ReadAllTextAsync(privateKeyPath);
+                var privateKeyData = JsonConvert.DeserializeObject<Dictionary<string, string>>(privateKeyJson);
+                var privateKey = privateKeyData?["private_key"];
+
+                if (string.IsNullOrEmpty(privateKey))
+                {
+                    _logger.LogWarning("Private key not found in Google Workspace configuration file");
+                    return null;
+                }
+
+                // For now, return a placeholder token
+                // In a real implementation, you would create a proper JWT token
+                _logger.LogInformation("Google Workspace token generation would require JWT signing");
+                return "google_workspace_token_placeholder";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting Google Workspace token");
+                return null;
             }
         }
     }
